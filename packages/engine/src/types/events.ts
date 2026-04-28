@@ -1,14 +1,17 @@
+import type { MinionInstance } from '../models/MinionInstance.js';
+import type { SpellInstance } from '../models/SpellInstance.js';
+
 export enum GameEventType {
-  OnAttack,
-  OnDamaged,
-  OnDeath,
-  OnSummon,
-  OnSell,
-  OnBuy,
-  OnCombatStart,
-  OnCombatEnd,
-  OnTurnStart,
-  OnTurnEnd,
+  OnAttack = 'OnAttack',
+  OnDamaged = 'OnDamaged',
+  OnDeath = 'OnDeath',
+  OnSummon = 'OnSummon',
+  OnSell = 'OnSell',
+  OnBuy = 'OnBuy',
+  OnCombatStart = 'OnCombatStart',
+  OnCombatEnd = 'OnCombatEnd',
+  OnTurnStart = 'OnTurnStart',
+  OnTurnEnd = 'OnTurnEnd',
 }
 
 export interface Effect {
@@ -17,8 +20,24 @@ export interface Effect {
   priority?: number;
 }
 
-export interface EventContext {
-  source: unknown;
-  target?: unknown;
-  board: unknown[];
+interface BaseEventContext {
+  eventType: GameEventType;
 }
+
+export interface CombatEventContext extends BaseEventContext {
+  phase: 'combat';
+  source: MinionInstance;
+  target?: MinionInstance;
+  friendlyBoard: MinionInstance[];
+  enemyBoard: MinionInstance[];
+}
+
+export interface RecruitEventContext extends BaseEventContext {
+  phase: 'recruit';
+  source: MinionInstance | SpellInstance;
+  target?: MinionInstance | SpellInstance;
+  board: MinionInstance[];
+  hand: (MinionInstance | SpellInstance)[];
+}
+
+export type EventContext = CombatEventContext | RecruitEventContext;

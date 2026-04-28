@@ -4,4 +4,5 @@ export interface PlayerConfig {
   id: string;
   name: string;
   heroDefinition: HeroDefinition;
+  isBot?: boolean;
 }

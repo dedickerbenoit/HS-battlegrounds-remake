@@ -13,10 +13,11 @@ export interface CardDefinition {
 export interface MinionDefinition extends CardDefinition {
   baseAttack: number;
   baseHP: number;
-  minionType: MinionType;
+  minionType: MinionType[];
   keywords?: Keyword[];
   effects?: Effect[];
   isToken?: boolean;
+  goldenVersion: boolean;
 }
 
 export interface SpellDefinition extends CardDefinition {

@@ -5,6 +5,7 @@ export interface HeroPowerDefinition {
   name: string;
   cost: number;
   effect: Effect;
+  isPassive?: boolean;
 }
 
 export interface HeroDefinition {
