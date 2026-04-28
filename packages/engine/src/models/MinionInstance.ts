@@ -1,17 +1,18 @@
 import type { MinionDefinition } from '../types/cards.js';
+import type { Enchantment } from '../types/enchantment.js';
 import type { MinionType } from '../types/enums.js';
 import type { Keyword } from '../types/keywords.js';
 
 export class MinionInstance {
-  instanceId: string;
-  definition: MinionDefinition;
+  readonly instanceId: string;
+  readonly definition: MinionDefinition;
   attackModifier: number;
   hpModifier: number;
   currentHp: number;
-  keywords: Keyword[];
-  minionType: MinionType;
+  keywords: Set<Keyword>;
+  minionType: MinionType[];
   golden: boolean;
-  enchantments: string[]; // serait bien d'avoir un typage plus précis pour les enchantements.
+  enchantments: Enchantment[];
 
   constructor(definition: MinionDefinition, instanceId: string) {
     this.instanceId = instanceId;
@@ -19,7 +20,7 @@ export class MinionInstance {
     this.attackModifier = 0;
     this.hpModifier = 0;
     this.currentHp = definition.baseHP;
-    this.keywords = [];
+    this.keywords = new Set();
     this.minionType = definition.minionType;
     this.golden = false;
     this.enchantments = [];
@@ -37,5 +38,13 @@ export class MinionInstance {
 
   public resetForCombat() {
     this.currentHp = this.definition.baseHP + this.hpModifier;
+  }
+
+  public get maxHp(): number {
+    return this.definition.baseHP + this.hpModifier;
+  }
+
+  public get effectiveAttack(): number {
+    return this.definition.baseAttack + this.attackModifier;
   }
 }

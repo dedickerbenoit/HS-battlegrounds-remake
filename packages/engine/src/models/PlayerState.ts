@@ -1,3 +1,4 @@
+import { Tier } from '../types/enums.js';
 import type { PlayerConfig } from '../types/player.js';
 import { HeroInstance } from './HeroInstance.js';
 import { MinionInstance } from './MinionInstance.js';
@@ -15,6 +16,8 @@ export class PlayerState {
   shopSpells: SpellInstance[];
   hpHistory: number[];
   alive: boolean;
+  tavernTier: Tier;
+  lastOpponentId?: string;
 
   constructor(config: PlayerConfig) {
     this.config = config;
@@ -28,5 +31,12 @@ export class PlayerState {
     this.shopSpells = [];
     this.hpHistory = [this.hero.currentHp];
     this.alive = true;
+    this.tavernTier = 1;
+  }
+
+  public upgradeTavernTier() {
+    if (this.tavernTier < Tier.Six) {
+      this.tavernTier += 1;
+    }
   }
 }
