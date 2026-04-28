@@ -355,14 +355,14 @@ All randomness must use a controlled RNG:
 
 ### State visibility rules
 
-| Data | Visible to player |
-|------|-------------------|
-| Own hand, board, shop | Yes |
-| Other players' boards | Yes (public info) |
-| Other players' hand | No |
-| Other players' shop | No |
-| Leaderboard / HP | Yes |
-| Combat replay events | Yes (for combats involving the player or spectated) |
+| Data                  | Visible to player                                   |
+| --------------------- | --------------------------------------------------- |
+| Own hand, board, shop | Yes                                                 |
+| Other players' boards | Yes (public info)                                   |
+| Other players' hand   | No                                                  |
+| Other players' shop   | No                                                  |
+| Leaderboard / HP      | Yes                                                 |
+| Combat replay events  | Yes (for combats involving the player or spectated) |
 
 ---
 

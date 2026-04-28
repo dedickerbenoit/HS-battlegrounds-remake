@@ -41,7 +41,7 @@ This avoids the problem of "who sits out" without introducing byes.
 Without caps, early-game snowballing would eliminate players before they can stabilize. The caps scale:
 
 | Turn | Max Damage |
-|------|------------|
+| ---- | ---------- |
 | <= 3 | 5          |
 | >= 4 | 10         |
 | >= 8 | 15         |
