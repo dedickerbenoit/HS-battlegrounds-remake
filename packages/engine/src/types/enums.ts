@@ -1,14 +1,16 @@
 export enum MinionType {
-  Beast,
-  Murloc,
-  Demon,
-  Mech,
-  Elemental,
-  Pirate,
-  Dragon,
-  Naga,
-  Quilboar,
-  All,
+  Beast = 'Beast',
+  Murloc = 'Murloc',
+  Demon = 'Demon',
+  Mech = 'Mech',
+  Elemental = 'Elemental',
+  Pirate = 'Pirate',
+  Dragon = 'Dragon',
+  Naga = 'Naga',
+  Quilboar = 'Quilboar',
+  Undead = 'Undead',
+  Neutral = 'Neutral',
+  All = 'All',
 }
 
 export enum Tier {
@@ -22,23 +24,23 @@ export enum Tier {
 }
 
 export enum CardType {
-  Minion,
-  Spell,
+  Minion = 'Minion',
+  Spell = 'Spell',
 }
 
 export enum GamePhase {
-  Init,
-  HeroSelection,
-  Recruit,
-  Combat,
-  End,
+  Init = 'Init',
+  HeroSelection = 'HeroSelection',
+  Recruit = 'Recruit',
+  Combat = 'Combat',
+  End = 'End',
 }
 
 export enum CardLocation {
-  Pool,
-  Shop,
-  Hand,
-  Board,
-  Graveyard,
-  Discovered,
+  Pool = 'Pool',
+  Shop = 'Shop',
+  Hand = 'Hand',
+  Board = 'Board',
+  Graveyard = 'Graveyard',
+  Discovered = 'Discovered',
 }
