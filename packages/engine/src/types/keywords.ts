@@ -1,0 +1,16 @@
+export enum Keyword {
+  Taunt = 'Taunt',
+  DivineShield = 'DivineShield',
+  Windfury = 'Windfury',
+  Poisonous = 'Poisonous',
+  Reborn = 'Reborn',
+  Deathrattle = 'Deathrattle',
+  Battlecry = 'Battlecry',
+  Avenge = 'Avenge',
+  StartOfCombat = 'StartOfCombat',
+  EndOfTurn = 'EndOfTurn',
+  Stealth = 'Stealth',
+  Magnetic = 'Magnetic',
+  Venomous = 'Venomous',
+  Cleave = 'Cleave',
+}

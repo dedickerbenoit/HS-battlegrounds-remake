@@ -75,6 +75,13 @@ A player can see cards from:
 
 ---
 
+## Board & Hand Limits
+
+- **Board**: maximum **7 minions** at any time
+- **Hand**: maximum **10 cards**. Cannot buy new cards while hand is full
+
+---
+
 ## Available Actions
 
 - Buy minion (3 gold)
@@ -106,13 +113,14 @@ A player can see cards from:
 ## Copies per Tier
 
 | Tier | Copies |
-| ---- | ------ |
+| ---- | ------ | --------------------------------------------------------------- |
 | 1    | 18     |
 | 2    | 15     |
 | 3    | 13     |
 | 4    | 11     |
 | 5    | 9      |
 | 6    | 6      |
+| 7    | 6      | (one Hero allows you to choose one minion into the Tier 7 pool) |
 
 ---
 
