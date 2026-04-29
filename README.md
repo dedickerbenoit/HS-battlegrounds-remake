@@ -81,7 +81,7 @@ packages/
 Chaque système majeur fait l'objet d'une entrée dans le journal : le problème, les choix, les erreurs, les solutions.
 
 001: Règles du jeu: docs/devlog/001-game-rules.md  
-002: Typage du moteur & état de jeu: docs-devlog/002-game-types-runtime-models.md  
+002: Typage du moteur & état de jeu: docs/devlog/002-game-types-runtime-models.md  
 003: Pool de cartes (A venir)  
 004: Moteur de combat (A venir)  
 005: Ghost & matchmaking (A venir)  
