@@ -73,7 +73,7 @@ packages/
   engine/                     # Logique de jeu pure (zéro dépendance)
   simulation/                 # Runner de bots & tests en batch (à venir)
   server/                     # Backend WebSocket (mode duo)
-  client/                         # Interface (découplage total avec l'engine)
+  client/                     # Interface (découplage total avec l'engine)
 ```
 
 ## Devlog
