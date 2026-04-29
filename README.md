@@ -45,6 +45,7 @@ Le choix de la stack est guidé par une contrainte forte: **le moteur de jeu doi
 ## Avancement
 
 - [x] Spécification des règles du jeu
+- [x] Core types & runtime models
 - [ ] GameState & machine à états
 - [ ] Génération du shop (roll, freeze, refresh)
 - [ ] Logique d'upgrade de taverne
@@ -67,11 +68,12 @@ docs/
   GAME_RULES.md              # Spécification complète des règles
   devlog/                     # Journal de développement
     001-game-rules.md
+    002-game-types-runtime-models.md
 packages/
   engine/                     # Logique de jeu pure (zéro dépendance)
-  simulation/                 # Runner de bots & tests en batch
+  simulation/                 # Runner de bots & tests en batch (à venir)
   server/                     # Backend WebSocket (mode duo)
-  ui/                         # Interface (découplage total avec l'engine)
+  client/                         # Interface (découplage total avec l'engine)
 ```
 
 ## Devlog
@@ -79,10 +81,11 @@ packages/
 Chaque système majeur fait l'objet d'une entrée dans le journal : le problème, les choix, les erreurs, les solutions.
 
 001: Règles du jeu: docs/devlog/001-game-rules.md  
-002: Pool de cartes (A venir)  
-003: Moteur de combat (A venir)  
-004: Ghost & matchmaking (A venir)  
-005: Bots & simulation (A venir)  
-006: Backend WebSocket & mode duo (A venir)
+002: Typage du moteur & état de jeu: docs-devlog/002-game-types-runtime-models.md  
+003: Pool de cartes (A venir)  
+004: Moteur de combat (A venir)  
+005: Ghost & matchmaking (A venir)  
+006: Bots & simulation (A venir)  
+007: Backend WebSocket & mode duo (A venir)
 
 _J'utilise l'IA comme outil d'aide à la conception et à l'architecture. Tout le code, les décisions et la compréhension des systèmes sont les miens._
