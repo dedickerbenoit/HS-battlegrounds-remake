@@ -12,6 +12,11 @@ export enum GameEventType {
   OnCombatEnd = 'OnCombatEnd',
   OnTurnStart = 'OnTurnStart',
   OnTurnEnd = 'OnTurnEnd',
+
+  //passif
+  OnBattlecryTriggered = 'OnBattlecryTriggered',
+  OnFriendlyMinionDeath = 'OnFriendlyMinionDeath',
+  OnGainAttack = 'OnGainAttack',
 }
 
 export interface Effect {
