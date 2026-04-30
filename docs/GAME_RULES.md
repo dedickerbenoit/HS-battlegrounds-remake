@@ -248,7 +248,9 @@ When a minion attacks another:
 ### Combat Flow
 
 ```
-1. Determine first attacker (random or player with more minions)
+1. Determine first attacker:
+   - Player with more minions on board attacks first
+   - If equal: random (coin flip)
 2. Current attacker's leftmost minion that hasn't attacked yet attacks
 3. Target: random enemy minion
 4. Resolve damage (simultaneous)
