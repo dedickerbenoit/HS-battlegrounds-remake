@@ -41,17 +41,19 @@ export class Rng {
     return min + Math.floor(this.next() * range);
   }
 
-  public shuffle<T>(array: T[]): T[] {
-    for (let i = array.length - 1; i > 0; i--) {
+  public shuffle<T>(array: readonly T[]): T[] {
+    const copy = [...array];
+    for (let i = copy.length - 1; i > 0; i--) {
       const j = this.nextInt(0, i);
-      const temp = array[i]!;
-      array[i] = array[j]!;
-      array[j] = temp;
+      const temp = copy[i]!;
+      copy[i] = copy[j]!;
+      copy[j] = temp;
     }
-    return array;
+    return copy;
   }
 
   public pick<T>(array: T[]): T {
+    if (array.length === 0) throw new Error('Cannot pick from empty array');
     return array[this.nextInt(0, array.length - 1)]!;
   }
 
