@@ -17,6 +17,9 @@ export enum GameEventType {
   OnBattlecryTriggered = 'OnBattlecryTriggered',
   OnFriendlyMinionDeath = 'OnFriendlyMinionDeath',
   OnGainAttack = 'OnGainAttack',
+  OnBuyOtherCard = 'OnBuyOtherCard',
+  OnSpellcraft = 'OnSpellcraft',
+  OnFriendlyMinionSummon = 'OnFriendlyMinionSummon',
 }
 
 export interface Effect {

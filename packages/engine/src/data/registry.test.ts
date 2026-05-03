@@ -69,7 +69,10 @@ describe('Card definitoins integrity', () => {
 
     it('getMinionsByTIer returns correct count', () => {
       const tier1 = getMinionsByTier(Tier.One);
-      expect(tier1.length).toBe(6);
+      expect(tier1.length).toBeGreaterThanOrEqual(22);
+      for (const m of tier1) {
+        expect(m.tier).toBe(Tier.One);
+      }
     });
   });
 });

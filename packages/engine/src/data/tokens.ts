@@ -1,5 +1,6 @@
 import type { MinionDefinition } from '../types/cards.js';
 import { CardType, MinionType, Tier } from '../types/enums.js';
+import { Keyword } from '../types/keywords.js';
 
 export const ALL_TOKENS: readonly MinionDefinition[] = [
   {
@@ -11,6 +12,55 @@ export const ALL_TOKENS: readonly MinionDefinition[] = [
     baseAttack: 1,
     baseHP: 1,
     minionType: [MinionType.Mech],
+    goldenVersion: false,
+    isToken: true,
+  },
+  {
+    id: 'BGS_TOKEN_002',
+    name: 'Skeleton',
+    cardType: CardType.Minion,
+    tier: Tier.One,
+    cost: 0,
+    baseAttack: 1,
+    baseHP: 1,
+    minionType: [MinionType.Undead],
+    goldenVersion: false,
+    isToken: true,
+  },
+  {
+    id: 'BGS_TOKEN_003',
+    name: 'Cubling',
+    cardType: CardType.Minion,
+    tier: Tier.One,
+    cost: 0,
+    baseAttack: 0,
+    baseHP: 1,
+    minionType: [MinionType.Beast],
+    keywords: [Keyword.Taunt],
+    goldenVersion: false,
+    isToken: true,
+  },
+  {
+    id: 'BGS_TOKEN_004',
+    name: 'Crab',
+    cardType: CardType.Minion,
+    tier: Tier.One,
+    cost: 0,
+    baseAttack: 3,
+    baseHP: 2,
+    minionType: [MinionType.Beast],
+    goldenVersion: false,
+    isToken: true,
+  },
+  {
+    id: 'BGS_TOKEN_005',
+    name: 'Whelp',
+    cardType: CardType.Minion,
+    tier: Tier.One,
+    cost: 0,
+    baseAttack: 3,
+    baseHP: 3,
+    minionType: [MinionType.Dragon],
     goldenVersion: false,
     isToken: true,
   },
