@@ -81,11 +81,128 @@ because they contribute the least to randomness quality.
 
 ## 2. Card definitions
 
-(To come)
+### The problem
+
+The engine needs a catalog of every card in the game — minions, spells,
+and tokens — that serves as the single source of truth. Without it,
+card data would be scattered or hardcoded in game logic.
+
+### The solution
+
+A registry system with three layers:
+
+1. **Definition arrays** — Static data organized by tier
+   (`TIER1_MINIONS`, `ALL_SPELLS`, `ALL_TOKENS`)
+2. **Registry maps** — O(1) lookups by ID
+   (`getMinionById`, `getSpellById`, `getTokenById`)
+3. **Utility functions** — `getMinionsByTier`, `getSpellsByTier`,
+   `makeGolden` (doubles stats, prefixes ID)
+
+### Card structure
+
+All cards follow the `CardDefinition` base interface:
+
+- `id` — Unique identifier (e.g. `BGS_MINION_T1_001`)
+- `name` — Display name
+- `cardType` — `Minion` or `Spell`
+- `tier` — Tavern tier (One through Six)
+- `cost` — Buy cost (always 3 for minions, varies for spells)
+
+Minions extend this with `baseAttack`, `baseHP`, `minionType[]`,
+`keywords[]`, `effects[]`, `isToken`, and `goldenVersion`.
+
+### Decisions
+
+- **Naming convention**: `BGS_MINION_T{tier}_{number}` for minions,
+  `BGS_TOKEN_{number}` for tokens, `BGS_SPELL_T{tier}_{number}` for spells
+- **Multi-tribe as array**: `minionType: MinionType[]` handles dual-tribe
+  minions like Surf n'Surf (Beast/Naga)
+- **Tokens separated**: Tokens have `isToken: true` and live in their own
+  array, never entering the shared pool
+- **Effects as stubs**: Every minion effect is declared with the correct
+  `eventType` but the handler is a `// TODO:` placeholder — effects will
+  be implemented when combat resolution is built
+- **`makeGolden` is a function, not data**: Golden versions are computed
+  (double stats, prefix ID) rather than stored as separate definitions.
+  This avoids maintaining parallel card lists
+
+### Current content
+
+- 22 Tier 1 minions (Beast, Murloc, Mech, Demon, Dragon, Undead,
+  Elemental, Pirate, Naga, Quilboar)
+- 5 tokens (Microbot, Skeleton, Cubling, Crab, Whelp)
+- 2 Tier 1 spells (A New Sprout, Enchanted Lasso)
+- Tiers 2–6 minion arrays exist but are empty (to be filled later)
 
 ## 3. Card Pool
 
-(To come)
+### The problem
+
+Hearthstone Battlegrounds uses a shared pool: all players draw from
+the same finite set of cards. Buying removes copies, selling returns
+them. This is the hardest system to get right because leaks or
+double-counts silently break game balance.
+
+### The solution
+
+A `CardPool` class that manages copy counts per definition ID.
+
+### Initialization
+
+On construction, the pool iterates through all non-token minion
+definitions and sets each to `POOL_COPIES_PER_TIER[tier]` copies:
+
+| Tier | Copies per minion |
+| ---- | ----------------- |
+| 1    | 18                |
+| 2    | 15                |
+| 3    | 13                |
+| 4    | 11                |
+| 5    | 9                 |
+| 6    | 6                 |
+
+### Shop generation
+
+`drawForShop(maxTier, count, rng)` uses **weighted random selection**:
+
+1. Build a list of eligible cards (tier <= maxTier, copies > 0)
+2. Sum total available copies as weights
+3. Pick a random number in [0, totalWeight)
+4. Walk the list, subtracting each card's weight until the random
+   value is consumed — that card is drawn
+5. Decrement the drawn card's count
+6. Repeat for `count` draws
+
+This means rarer cards (fewer copies remaining) are drawn less often,
+which matches the real game's probability distribution.
+
+### Shop size per tier
+
+| Tier | Minions offered |
+| ---- | --------------- |
+| 1    | 3               |
+| 2    | 4               |
+| 3    | 4               |
+| 4    | 5               |
+| 5    | 5               |
+| 6    | 6               |
+
+### Return and remove
+
+- `returnCard(id)` — Increments count (capped at tier max). Used on
+  sell, death, and shop refresh.
+- `removeCard(id)` — Decrements count. Returns false if already at 0.
+
+### Decisions
+
+- **Weighted selection over rejection sampling**: Rejection sampling
+  (draw random, retry if unavailable) becomes slow when the pool is
+  depleted. Weighted selection always terminates in O(n) where n is
+  the number of distinct cards.
+- **No spell pool**: Spells are not part of the shared pool.
+  They are generated separately.
+- **Tokens excluded**: Token minions (`isToken: true`) are never
+  added to the pool — they are created on demand by effects.
 
 ## 4. GameState & phases
 
