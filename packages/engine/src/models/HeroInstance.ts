@@ -9,7 +9,7 @@ export class HeroInstance {
   constructor(definition: HeroDefinition) {
     this.definition = definition;
     this.currentHp = definition.baseHp;
-    this.armor = 0;
+    this.armor = definition.armor;
     this.heroPowerUsed = false;
   }
 
@@ -21,5 +21,9 @@ export class HeroInstance {
 
   public isDead(): boolean {
     return this.currentHp <= 0;
+  }
+
+  public gainArmor(amount: number): void {
+    this.armor = Math.min(this.armor + amount, 5);
   }
 }

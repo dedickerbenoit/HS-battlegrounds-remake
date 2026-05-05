@@ -13,4 +13,5 @@ export enum Keyword {
   Magnetic = 'Magnetic',
   Venomous = 'Venomous',
   Cleave = 'Cleave',
+  Spellcraft = 'Spellcraft',
 }

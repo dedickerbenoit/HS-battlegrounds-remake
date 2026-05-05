@@ -20,7 +20,7 @@ export class MinionInstance {
     this.attackModifier = 0;
     this.hpModifier = 0;
     this.currentHp = definition.baseHP;
-    this.keywords = new Set();
+    this.keywords = new Set(definition.keywords ?? []);
     this.minionType = definition.minionType;
     this.golden = false;
     this.enchantments = [];

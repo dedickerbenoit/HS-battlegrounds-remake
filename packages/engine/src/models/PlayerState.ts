@@ -1,4 +1,5 @@
 import { Tier } from '../types/enums.js';
+import type { HeroDefinition } from '../types/hero.js';
 import type { PlayerConfig } from '../types/player.js';
 import { HeroInstance } from './HeroInstance.js';
 import { MinionInstance } from './MinionInstance.js';
@@ -18,6 +19,7 @@ export class PlayerState {
   alive: boolean;
   tavernTier: Tier;
   lastOpponentId?: string;
+  upgradeProgress: number;
 
   constructor(config: PlayerConfig) {
     this.config = config;
@@ -32,11 +34,18 @@ export class PlayerState {
     this.hpHistory = [this.hero.currentHp];
     this.alive = true;
     this.tavernTier = 1;
+    this.upgradeProgress = 0;
   }
 
   public upgradeTavernTier() {
     if (this.tavernTier < Tier.Six) {
       this.tavernTier += 1;
+      this.upgradeProgress = 0;
     }
+  }
+
+  public setHero(definition: HeroDefinition): void {
+    this.hero = new HeroInstance(definition);
+    this.hpHistory = [this.hero.currentHp];
   }
 }
