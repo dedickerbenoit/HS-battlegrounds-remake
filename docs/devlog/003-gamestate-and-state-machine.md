@@ -206,9 +206,131 @@ which matches the real game's probability distribution.
 
 ## 4. GameState & phases
 
-(To come)
+### The problem
+
+All the building blocks exist (types, models, card pool, RNG) but
+nothing connects them. There is no game loop, no phase management,
+and no way for a player to actually perform actions like buying a
+minion or upgrading their tavern.
+
+### The solution
+
+A `GameState` class that acts as the central orchestrator, combined
+with a state machine that enforces phase transitions:
+
+```
+Init → HeroSelection → Recruit ⇄ Combat → End
+```
+
+The system is split across four files:
+
+- **`constants.ts`** — Game rules as values (gold curve, costs, caps)
+- **`EventBus.ts`** — Synchronous event dispatch with priority
+- **`actions.ts`** — Typed action definitions (discriminated union)
+- **`actionHandlers.ts`** — Validation and state mutation per action
+- **`GameState.ts`** — Lifecycle, matchmaking, combat stub
+
+### Phase lifecycle
+
+**Init** — `GameState` is constructed with a config (player setups,
+seed, hero pool). Nothing happens until `initialize()` is called.
+
+**HeroSelection** — Each player receives 4 heroes to choose from.
+The pool is shuffled deterministically via `rng.shuffle()`. Players
+dispatch `SelectHero` actions. When all players have selected, the
+phase transitions to Recruit automatically.
+
+**Recruit** — Players receive gold (`min(3 + turn - 1, 10)`), a
+shop is generated from the card pool, and they can perform actions:
+buy, sell, play, refresh, freeze, upgrade tavern, reorder board.
+Every action is validated (correct phase, enough gold, valid indices)
+before mutating state. When all alive players dispatch `EndTurn`,
+combat starts.
+
+**Combat** — Minions are reset (`resetForCombat()`), matchmaking
+pairs opponents, and combat is resolved. Currently a stub: coin flip
+determines winner/loser, damage equals the winner's tavern tier.
+The real combat engine (alternating attacks, deathrattles, etc.)
+will replace this in a future branch.
+
+**End** — Triggered when 1 or fewer players remain alive.
+
+### Action system
+
+Actions are a discriminated union on `ActionType`:
+
+```
+SelectHero | BuyMinion | BuySpell | SellMinion | PlayCard
+RefreshShop | FreezeShop | UpgradeTavern | ReorderBoard | EndTurn
+```
+
+Each action carries a `playerId` and type-specific fields (e.g.
+`shopIndex`, `handIndex`, `boardPosition`). The `dispatch()` method
+routes to the correct handler, which returns `{ success, error? }`.
+
+Handlers are pure functions that receive the `GameState` and action.
+They share a `requirePhase` guard that rejects actions called in the
+wrong phase or by unknown players.
+
+### EventBus
+
+A synchronous event dispatcher. Effects register with an `eventType`
+and optional `priority` (lower = first). When `emit(ctx)` is called,
+all matching listeners fire in priority order.
+
+This is the foundation for card effects — when a minion is bought,
+`OnBuy` is emitted. When a minion is played, `OnSummon` fires.
+Effect handlers will be implemented alongside the combat engine.
+
+### Matchmaking
+
+1. Shuffle alive players with `rng.shuffle()`
+2. Pair sequentially
+3. Attempt to avoid repeat opponents (swap if possible)
+4. Odd player is paired against a ghost (deep copy of a dead
+   player's last board)
+
+Ghost combat is currently a no-op — the odd player takes no damage.
+This will be resolved when the combat engine is implemented.
+
+### Decisions
+
+- **Handlers as standalone functions, not methods**: Keeps `GameState`
+  focused on lifecycle. Handlers import `GameState` as a type only,
+  avoiding circular dependencies at runtime.
+- **Combat as a stub**: The game loop needs to work end-to-end before
+  combat details are implemented. A coin flip is enough to test phase
+  transitions, death, gold progression, and matchmaking.
+- **`Partial<Record<Tier, number>>`** for upgrade costs instead of
+  `Record<Tier, number | null>`. Avoids sentinel values and Tier.Seven
+  was removed from the enum entirely (max tier is Six).
+- **Damage cap by turn**: Prevents early snowballing. Removed when
+  4 or fewer players remain.
+- **`upgradeProgress`** tracks turns spent at current tier, reducing
+  upgrade cost by 1 per turn. Reset to 0 on upgrade.
+- **Frozen shop preserved**: If a player freezes, their shop minions
+  are not returned to the pool on the next turn. The freeze flag is
+  always cleared after recruit phase starts.
+
+### Model changes
+
+Two modifications to existing models were required:
+
+- **`HeroInstance`**: Armor now initializes from `definition.armor`
+  (was hardcoded to 0). Added `gainArmor()` capped at 5.
+- **`PlayerState`**: Added `upgradeProgress` field and `setHero()`
+  method to replace the hero after selection phase.
+
+### What's deferred
+
+- **Triple detection**: Identifying three copies of the same minion
+  in hand/board and merging into a golden version.
+- **Real combat**: Alternating attacks, divine shield, deathrattles,
+  reborn, poisonous, windfury, cleave.
+- **Ghost combat resolution**: Odd player actually fighting the ghost.
+- **Hero powers**: Integration with the action system.
 
 ## Related
 
 - Previous: 002 - Game types & runtime models
-- Next: 004 - (TBD)
+- Next: 004 - Combat engine
