@@ -20,7 +20,6 @@ export enum Tier {
   Four = 4,
   Five = 5,
   Six = 6,
-  Seven = 7,
 }
 
 export enum CardType {

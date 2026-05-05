@@ -11,7 +11,6 @@ export const POOL_COPIES_PER_TIER: Record<Tier, number> = {
   [Tier.Four]: 11,
   [Tier.Five]: 9,
   [Tier.Six]: 6,
-  [Tier.Seven]: 6,
 };
 
 export const SHOP_MINION_COUNT: Record<Tier, number> = {
@@ -21,7 +20,6 @@ export const SHOP_MINION_COUNT: Record<Tier, number> = {
   [Tier.Four]: 5,
   [Tier.Five]: 5,
   [Tier.Six]: 6,
-  [Tier.Seven]: 6,
 };
 
 export class CardPool {
